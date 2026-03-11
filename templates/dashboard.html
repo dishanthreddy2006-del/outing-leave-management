@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - Outing & Leave Management</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <h2>👋 Welcome, {{ session['name'] }}</h2>
+            <a href="/logout" class="logout-btn">Logout</a>
+        </div>
+
+        <div class="actions">
+            <a href="/outing" class="btn-green">🚶 Apply for Outing</a>
+            <a href="/leave" class="btn-blue">📋 Apply for Leave</a>
+        </div>
+
+        <!-- Outing Requests -->
+        <div class="card">
+            <h3>🚶 My Outing Requests</h3>
+            {% if outings %}
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Destination</th>
+                    <th>Reason</th>
+                    <th>Out Time</th>
+                    <th>Return Time</th>
+                    <th>Status</th>
+                </tr>
+                {% for o in outings %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ o[3] }}</td>
+                    <td>{{ o[4] }}</td>
+                    <td>{{ o[5] }}</td>
+                    <td>{{ o[6] }}</td>
+                    <td class="status-{{ o[7]|lower }}">{{ o[7] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            <p class="empty">No outing requests yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- Leave Requests -->
+        <div class="card">
+            <h3>📋 My Leave Requests</h3>
+            {% if leaves %}
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Reason</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                </tr>
+                {% for l in leaves %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ l[2] }}</td>
+                    <td>{{ l[3] }}</td>
+                    <td>{{ l[4] }}</td>
+                    <td>{{ l[5] }}</td>
+                    <td class="status-{{ l[6]|lower }}">{{ l[6] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            <p class="empty">No leave requests yet.</p>
+            {% endif %}
+        </div>
+
+    </div>
+</body>
+</html>

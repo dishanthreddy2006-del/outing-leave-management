@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register - Outing & Leave Management</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🏫 Outing & Leave Management</h1>
+        <div class="card">
+            <h2>Student Register</h2>
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+            <form method="POST">
+                <input type="text" name="name" placeholder="Full Name" required><br>
+                <input type="text" name="roll_no" placeholder="Roll Number / USN" required><br>
+                <input type="password" name="password" placeholder="Password" required><br>
+                <input type="text" name="hostel_room" placeholder="Hostel Room Number" required><br>
+                <button type="submit">Register</button>
+            </form>
+            <p>Already have an account? <a href="/login">Login here</a></p>
+        </div>
+    </div>
+</body>
+</html>

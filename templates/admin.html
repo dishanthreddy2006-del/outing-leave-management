@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard - Outing & Leave Management</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <h2>🛡️ Admin Dashboard</h2>
+            <a href="/logout" class="logout-btn">Logout</a>
+        </div>
+
+        <!-- Outing Requests -->
+        <div class="card">
+            <h3>🚶 Outing Requests</h3>
+            {% if outings %}
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Student</th>
+                    <th>Roll No</th>
+                    <th>Destination</th>
+                    <th>Reason</th>
+                    <th>Out Time</th>
+                    <th>Return Time</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                {% for o in outings %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ o[1] }}</td>
+                    <td>{{ o[2] }}</td>
+                    <td>{{ o[3] }}</td>
+                    <td>{{ o[4] }}</td>
+                    <td>{{ o[5] }}</td>
+                    <td>{{ o[6] }}</td>
+                    <td class="status-{{ o[7]|lower }}">{{ o[7] }}</td>
+                    <td>
+                        {% if o[7] == 'Pending' %}
+                        <a href="/approve/outing/{{ o[0] }}" class="btn-approve">✅ Approve</a>
+                        <a href="/reject/outing/{{ o[0] }}" class="btn-reject">❌ Reject</a>
+                        {% else %}
+                        <span>—</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            <p class="empty">No outing requests yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- Leave Requests -->
+        <div class="card">
+            <h3>📋 Leave Requests</h3>
+            {% if leaves %}
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Student</th>
+                    <th>Roll No</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Reason</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                {% for l in leaves %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ l[1] }}</td>
+                    <td>{{ l[2] }}</td>
+                    <td>{{ l[3] }}</td>
+                    <td>{{ l[4] }}</td>
+                    <td>{{ l[5] }}</td>
+                    <td>{{ l[6] }}</td>
+                    <td class="status-{{ l[7]|lower }}">{{ l[7] }}</td>
+                    <td>
+                        {% if l[7] == 'Pending' %}
+                        <a href="/approve/leave/{{ l[0] }}" class="btn-approve">✅ Approve</a>
+                        <a href="/reject/leave/{{ l[0] }}" class="btn-reject">❌ Reject</a>
+                        {% else %}
+                        <span>—</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            <p class="empty">No leave requests yet.</p>
+            {% endif %}
+        </div>
+
+    </div>
+</body>
+</html>

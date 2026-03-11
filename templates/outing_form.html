@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Outing Request - Outing & Leave Management</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <h2>🚶 Apply for Outing</h2>
+            <a href="/dashboard" class="logout-btn">← Back</a>
+        </div>
+
+        <div class="card">
+            <form method="POST">
+                <label>Destination</label>
+                <input type="text" name="destination" placeholder="Where are you going?" required><br>
+
+                <label>Reason</label>
+                <input type="text" name="reason" placeholder="Reason for outing" required><br>
+
+                <label>Out Time</label>
+                <input type="datetime-local" name="out_time" required><br>
+
+                <label>Return Time</label>
+                <input type="datetime-local" name="return_time" required><br>
+
+                <button type="submit">Submit Request</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

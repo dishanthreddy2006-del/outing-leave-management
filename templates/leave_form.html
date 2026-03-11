@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leave Request - Outing & Leave Management</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <h2>📋 Apply for Leave</h2>
+            <a href="/dashboard" class="logout-btn">← Back</a>
+        </div>
+
+        <div class="card">
+            <form method="POST">
+                <label>Leave Type</label>
+                <select name="leave_type" required>
+                    <option value="">-- Select Type --</option>
+                    <option value="Medical">Medical</option>
+                    <option value="Personal">Personal</option>
+                    <option value="Family">Family</option>
+                    <option value="Other">Other</option>
+                </select><br>
+
+                <label>From Date</label>
+                <input type="date" name="from_date" required><br>
+
+                <label>To Date</label>
+                <input type="date" name="to_date" required><br>
+
+                <label>Reason</label>
+                <textarea name="reason" placeholder="Explain your reason..." rows="4" required></textarea><br>
+
+                <button type="submit">Submit Request</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
