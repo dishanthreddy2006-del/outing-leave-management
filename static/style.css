@@ -206,4 +206,62 @@ table tr:hover {
     color: #999;
     text-align: center;
     padding: 10px;
+}/* Notifications */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.notif-btn {
+    background-color: #f39c12;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    position: relative;
+}
+
+.notif-btn:hover {
+    background-color: #d68910;
+}
+
+.badge {
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 7px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.notif-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.notif-item.unread {
+    background-color: #eaf4fb;
+    border-left: 4px solid #3498db;
+    font-weight: 600;
+}
+
+.notif-item.read {
+    background-color: #f9f9f9;
+    border-left: 4px solid #ccc;
+    color: #888;
+}
+
+.notif-item small {
+    color: #aaa;
+    font-size: 12px;
+    margin-left: 10px;
+    white-space: nowrap;
 }

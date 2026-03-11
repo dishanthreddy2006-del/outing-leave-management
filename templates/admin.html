@@ -8,8 +8,29 @@
     <div class="container">
         <div class="navbar">
             <h2>🛡️ Admin Dashboard</h2>
-            <a href="/logout" class="logout-btn">Logout</a>
+            <div class="nav-right">
+                <a href="/admin/mark_read" class="notif-btn">
+                    🔔 Notifications
+                    {% if unread > 0 %}
+                        <span class="badge">{{ unread }}</span>
+                    {% endif %}
+                </a>
+                <a href="/logout" class="logout-btn">Logout</a>
+            </div>
         </div>
+
+        <!-- Notifications Panel -->
+        {% if notifs %}
+        <div class="card">
+            <h3>🔔 Notifications</h3>
+            {% for n in notifs %}
+            <div class="notif-item {{ 'unread' if n[3] == 0 else 'read' }}">
+                <span>{{ n[2] }}</span>
+                <small>{{ n[4] }}</small>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
 
         <!-- Outing Requests -->
         <div class="card">
