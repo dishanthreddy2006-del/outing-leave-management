@@ -35,7 +35,8 @@ def init_db():
         to_date TEXT,
         reason TEXT,
         leave_type TEXT,
-        status TEXT DEFAULT 'Pending'
+        status TEXT DEFAULT 'Pending',
+        proof TEXT
     )''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS notifications (
@@ -173,14 +174,23 @@ def leave():
     if 'user_id' not in session:
         return redirect(url_for('login'))
     if request.method == 'POST':
+        proof_filename = None
+        if 'proof' in request.files:
+            proof = request.files['proof']
+            if proof.filename != '':
+                from werkzeug.utils import secure_filename
+                upload_folder = os.path.join('static', 'uploads')
+                os.makedirs(upload_folder, exist_ok=True)
+                proof_filename = secure_filename(proof.filename)
+                proof.save(os.path.join(upload_folder, proof_filename))
+
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
-        c.execute("INSERT INTO leave_requests (student_id, from_date, to_date, reason, leave_type) VALUES (?,?,?,?,?)",
+        c.execute("INSERT INTO leave_requests (student_id, from_date, to_date, reason, leave_type, proof) VALUES (?,?,?,?,?,?)",
                   (session['user_id'], request.form['from_date'], request.form['to_date'],
-                   request.form['reason'], request.form['leave_type']))
+                   request.form['reason'], request.form['leave_type'], proof_filename))
         conn.commit()
         conn.close()
-        # Notify admin
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
         c.execute("SELECT id FROM students WHERE roll_no='admin'")
@@ -190,7 +200,6 @@ def leave():
             add_notification(admin[0], f"📋 New leave request from {session['name']} ({session['roll_no']})")
         return redirect(url_for('student_dashboard'))
     return render_template('leave_form.html')
-
 @app.route('/admin')
 def admin_dashboard():
     if session.get('roll_no') != 'admin':
@@ -200,7 +209,7 @@ def admin_dashboard():
     c.execute('''SELECT o.id, s.name, s.roll_no, o.destination, o.reason, o.out_time, o.return_time, o.status
                  FROM outing_requests o JOIN students s ON o.student_id = s.id''')
     outings = c.fetchall()
-    c.execute('''SELECT l.id, s.name, s.roll_no, l.from_date, l.to_date, l.reason, l.leave_type, l.status
+    c.execute('''SELECT l.id, s.name, s.roll_no, l.from_date, l.to_date, l.reason, l.leave_type, l.status, l.proof
                  FROM leave_requests l JOIN students s ON l.student_id = s.id''')
     leaves = c.fetchall()
     conn.close()

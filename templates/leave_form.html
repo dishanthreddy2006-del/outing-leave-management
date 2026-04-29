@@ -12,15 +12,21 @@
         </div>
 
         <div class="card">
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 <label>Leave Type</label>
-                <select name="leave_type" required>
+                <select name="leave_type" id="leave_type" required onchange="toggleUpload()">
                     <option value="">-- Select Type --</option>
                     <option value="Medical">Medical</option>
                     <option value="Personal">Personal</option>
                     <option value="Family">Family</option>
                     <option value="Other">Other</option>
                 </select><br>
+
+                <!-- Medical proof upload - only shows for Medical -->
+                <div id="medical_upload" style="display:none;">
+                    <label>📎 Upload Medical Proof (Image or PDF)</label>
+                    <input type="file" name="proof" accept=".jpg,.jpeg,.png,.pdf"><br>
+                </div>
 
                 <label>From Date</label>
                 <input type="date" name="from_date" required><br>
@@ -35,5 +41,17 @@
             </form>
         </div>
     </div>
+
+    <script>
+        function toggleUpload() {
+            var leaveType = document.getElementById('leave_type').value;
+            var uploadDiv = document.getElementById('medical_upload');
+            if (leaveType === 'Medical') {
+                uploadDiv.style.display = 'block';
+            } else {
+                uploadDiv.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>
