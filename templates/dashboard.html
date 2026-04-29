@@ -32,11 +32,11 @@
                 {% for o in outings %}
                 <tr>
                     <td>{{ loop.index }}</td>
+                    <td>{{ o[2] }}</td>
                     <td>{{ o[3] }}</td>
                     <td>{{ o[4] }}</td>
                     <td>{{ o[5] }}</td>
-                    <td>{{ o[6] }}</td>
-                    <td class="status-{{ o[7]|lower }}">{{ o[7] }}</td>
+                    <td class="status-{{ o[6]|lower }}">{{ o[6] }}</td>
                 </tr>
                 {% endfor %}
             </table>
