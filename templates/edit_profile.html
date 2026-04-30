@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Profile - Outing & Leave Management</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <h2>✏️ Edit Profile</h2>
+            <a href="/dashboard" class="logout-btn">← Back</a>
+        </div>
+
+        <div class="card" style="max-width:500px;margin:auto;">
+
+            <!-- Current Photo -->
+            <div style="text-align:center;margin-bottom:20px;">
+                {% if student[5] %}
+                <img src="/static/uploads/{{ student[5] }}" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid #2c3e50;">
+                {% else %}
+                <div style="width:100px;height:100px;border-radius:50%;background:#3498db;display:flex;align-items:center;justify-content:center;color:white;font-size:40px;font-weight:bold;margin:auto;">
+                    {{ student[1][0] }}
+                </div>
+                {% endif %}
+                <p style="color:#888;font-size:13px;margin-top:8px;">Current Photo</p>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data">
+                <label>Full Name</label>
+                <input type="text" name="name" value="{{ student[1] }}" required><br>
+
+                <label>Roll No (cannot change)</label>
+                <input type="text" value="{{ student[2] }}" disabled style="background:#f0f0f0;"><br>
+
+                <label>New Password</label>
+                <input type="password" name="password" value="{{ student[3] }}" required><br>
+
+                <label>Hostel Room</label>
+                <input type="text" name="hostel_room" value="{{ student[4] }}" required><br>
+
+                <label>📷 Update Profile Photo (Optional)</label>
+                <input type="file" name="photo" accept=".jpg,.jpeg,.png"><br>
+
+                <button type="submit">💾 Save Changes</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

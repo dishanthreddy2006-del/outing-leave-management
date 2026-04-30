@@ -20,7 +20,8 @@ def init_db():
         name TEXT NOT NULL,
         roll_no TEXT UNIQUE NOT NULL,
         password TEXT NOT NULL,
-        hostel_room TEXT
+        hostel_room TEXT,
+        photo TEXT
     )''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS outing_requests (
@@ -52,7 +53,7 @@ def init_db():
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )''')
 
-    c.execute("INSERT INTO students (name, roll_no, password, hostel_room) VALUES ('Admin', 'admin', 'admin123', 'N/A') ON CONFLICT (roll_no) DO NOTHING")
+    c.execute("INSERT INTO students (name, roll_no, password, hostel_room, photo) VALUES ('Admin', 'admin', 'admin123', 'N/A', NULL) ON CONFLICT (roll_no) DO NOTHING")
 
     conn.commit()
     conn.close()
@@ -100,6 +101,7 @@ def login():
             session['user_id'] = user[0]
             session['name'] = user[1]
             session['roll_no'] = user[2]
+            session['photo'] = user[5] if user[5] else None
             if roll == 'admin':
                 return redirect(url_for('admin_dashboard'))
             return redirect(url_for('student_dashboard'))
@@ -113,10 +115,22 @@ def register():
         roll = request.form['roll_no']
         pwd = request.form['password']
         room = request.form['hostel_room']
+        photo_filename = None
+
+        if 'photo' in request.files:
+            photo = request.files['photo']
+            if photo.filename != '':
+                from werkzeug.utils import secure_filename
+                upload_folder = os.path.join('static', 'uploads')
+                os.makedirs(upload_folder, exist_ok=True)
+                photo_filename = secure_filename(photo.filename)
+                photo.save(os.path.join(upload_folder, photo_filename))
+
         conn = get_conn()
         c = conn.cursor()
         try:
-            c.execute("INSERT INTO students (name, roll_no, password, hostel_room) VALUES (%s,%s,%s,%s)", (name, roll, pwd, room))
+            c.execute("INSERT INTO students (name, roll_no, password, hostel_room, photo) VALUES (%s,%s,%s,%s,%s)",
+                      (name, roll, pwd, room, photo_filename))
             conn.commit()
             conn.close()
             return redirect(url_for('login'))
@@ -266,6 +280,44 @@ def reject(type, req_id):
         label = 'Outing' if type == 'outing' else 'Leave'
         add_notification(student[0], f"❌ Your {label} request #{req_id} has been Rejected.")
     return redirect(url_for('admin_dashboard'))
+
+@app.route('/edit_profile', methods=['GET', 'POST'])
+def edit_profile():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    conn = get_conn()
+    c = conn.cursor()
+    if request.method == 'POST':
+        name = request.form['name']
+        password = request.form['password']
+        room = request.form['hostel_room']
+        photo_filename = None
+
+        if 'photo' in request.files:
+            photo = request.files['photo']
+            if photo.filename != '':
+                from werkzeug.utils import secure_filename
+                upload_folder = os.path.join('static', 'uploads')
+                os.makedirs(upload_folder, exist_ok=True)
+                photo_filename = secure_filename(photo.filename)
+                photo.save(os.path.join(upload_folder, photo_filename))
+
+        if photo_filename:
+            c.execute("UPDATE students SET name=%s, password=%s, hostel_room=%s, photo=%s WHERE id=%s",
+                      (name, password, room, photo_filename, session['user_id']))
+        else:
+            c.execute("UPDATE students SET name=%s, password=%s, hostel_room=%s WHERE id=%s",
+                      (name, password, room, session['user_id']))
+
+        conn.commit()
+        session['name'] = name
+        conn.close()
+        return redirect(url_for('student_dashboard'))
+
+    c.execute("SELECT * FROM students WHERE id=%s", (session['user_id'],))
+    student = c.fetchone()
+    conn.close()
+    return render_template('edit_profile.html', student=student)
 
 @app.route('/logout')
 def logout():

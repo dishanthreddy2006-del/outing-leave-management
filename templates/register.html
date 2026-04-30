@@ -12,11 +12,22 @@
             {% if error %}
                 <p class="error">{{ error }}</p>
             {% endif %}
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
+                <label>Full Name</label>
                 <input type="text" name="name" placeholder="Full Name" required><br>
+
+                <label>Roll Number / USN</label>
                 <input type="text" name="roll_no" placeholder="Roll Number / USN" required><br>
+
+                <label>Password</label>
                 <input type="password" name="password" placeholder="Password" required><br>
+
+                <label>Hostel Room Number</label>
                 <input type="text" name="hostel_room" placeholder="Hostel Room Number" required><br>
+
+                <label>📷 Profile Photo (Optional)</label>
+                <input type="file" name="photo" accept=".jpg,.jpeg,.png"><br>
+
                 <button type="submit">Register</button>
             </form>
             <p>Already have an account? <a href="/login">Login here</a></p>
