@@ -23,6 +23,7 @@ def init_db():
         hostel_room TEXT,
         photo TEXT
     )''')
+    c.execute("ALTER TABLE students ADD COLUMN IF NOT EXISTS photo TEXT")
 
     c.execute('''CREATE TABLE IF NOT EXISTS outing_requests (
         id SERIAL PRIMARY KEY,
@@ -52,6 +53,7 @@ def init_db():
         is_read INTEGER DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )''')
+    
 
     c.execute("INSERT INTO students (name, roll_no, password, hostel_room, photo) VALUES ('Admin', 'admin', 'admin123', 'N/A', NULL) ON CONFLICT (roll_no) DO NOTHING")
 
